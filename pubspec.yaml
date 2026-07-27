@@ -1,0 +1,52 @@
+name: pigmy_app
+description: Pigmy Collection Application with offline-first support.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+
+  # Networking
+  dio: ^5.7.0
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # Secure Storage
+  flutter_secure_storage: ^9.2.4
+
+  # Offline Database
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
+
+  # Sync & Connectivity
+  connectivity_plus: ^6.1.1
+
+  # Bluetooth Thermal Printer
+  flutter_blue_plus: ^1.35.3
+  esc_pos_utils_plus: ^2.0.4
+
+  # Utilities
+  equatable: ^2.0.7
+  intl: ^0.20.1
+  uuid: ^4.5.1
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.13
+  isar_generator: ^3.1.0+1
+
+flutter:
+  uses-material-design: true
