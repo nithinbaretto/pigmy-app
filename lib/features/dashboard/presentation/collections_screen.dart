@@ -10,6 +10,7 @@ import '../../../core/router/route_names.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/auth_logo.dart';
+import '../../../core/widgets/card_hex_accent.dart';
 
 /// Figma "Collection Dashboard" — shown after tapping Collections on home.
 class CollectionsScreen extends StatelessWidget {
@@ -42,6 +43,10 @@ class CollectionsScreen extends StatelessWidget {
         iconAsset: AppAssets.iconSb,
       ),
     ];
+
+    final top = MediaQuery.paddingOf(context).top;
+    const headerContent = 86.0;
+    const cardGap = 16.0;
 
     return Scaffold(
       backgroundColor: AppColors.dashboardBg,
@@ -84,7 +89,7 @@ class CollectionsScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 150,
+            top: top + headerContent + cardGap,
             left: 24,
             right: 24,
             child: _CollectionsCard(tiles: tiles)
@@ -188,7 +193,6 @@ class _CollectionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -200,85 +204,52 @@ class _CollectionsCard extends StatelessWidget {
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Stack(
-        clipBehavior: Clip.none,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppStrings.collections,
-                style: AppTextStyles.collectionsTitle,
-              ),
-              const SizedBox(height: 36),
-              SizedBox(
-                height: 240,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(child: _tile(context, tiles[0])),
-                          Container(width: 1, color: const Color(0xFFE8E8EE)),
-                          Expanded(child: _tile(context, tiles[1])),
-                        ],
-                      ),
-                    ),
-                    Container(height: 1, color: const Color(0xFFE8E8EE)),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(child: _tile(context, tiles[2])),
-                          Container(width: 1, color: const Color(0xFFE8E8EE)),
-                          Expanded(child: _tile(context, tiles[3])),
-                        ],
-                      ),
-                    ),
-                  ],
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.collections,
+                  style: AppTextStyles.collectionsTitle,
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: -34,
-            right: -10,
-            child: IgnorePointer(
-              child: SizedBox(
-                width: 72,
-                height: 72,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco1,
-                        width: 32,
-                        height: 32,
+                const SizedBox(height: 36),
+                SizedBox(
+                  height: 240,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(child: _tile(context, tiles[0])),
+                            Container(width: 1, color: const Color(0xFFE8E8EE)),
+                            Expanded(child: _tile(context, tiles[1])),
+                          ],
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      left: 0,
-                      top: 28,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco2,
-                        width: 32,
-                        height: 32,
+                      Container(height: 1, color: const Color(0xFFE8E8EE)),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(child: _tile(context, tiles[2])),
+                            Container(width: 1, color: const Color(0xFFE8E8EE)),
+                            Expanded(child: _tile(context, tiles[3])),
+                          ],
+                        ),
                       ),
-                    ),
-                    Positioned(
-                      left: 28,
-                      top: 14,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco3,
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
+          ),
+          const Positioned(
+            top: CardHexAccent.top,
+            right: CardHexAccent.right,
+            child: IgnorePointer(child: CardHexAccent()),
           ),
         ],
       ),

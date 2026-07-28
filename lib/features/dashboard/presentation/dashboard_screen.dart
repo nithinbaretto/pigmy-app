@@ -10,6 +10,7 @@ import '../../../core/router/route_names.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/auth_logo.dart';
+import '../../../core/widgets/card_hex_accent.dart';
 
 /// Figma home "Dashboard" — shown right after login / signup.
 class DashboardScreen extends StatelessWidget {
@@ -70,6 +71,10 @@ class DashboardScreen extends StatelessWidget {
       ),
     ];
 
+    final top = MediaQuery.paddingOf(context).top;
+    const headerContent = 86.0;
+    const cardGap = 16.0;
+
     return Scaffold(
       backgroundColor: AppColors.dashboardBg,
       body: Stack(
@@ -109,7 +114,7 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 150,
+            top: top + headerContent + cardGap,
             left: 24,
             right: 24,
             child: _DashboardCard(tiles: tiles)
@@ -133,7 +138,7 @@ class _HomeHeader extends StatelessWidget {
     final top = MediaQuery.paddingOf(context).top;
 
     return SizedBox(
-      height: top + 86,
+      height: top + 72,
       child: Stack(
         children: [
           Positioned.fill(
@@ -194,7 +199,6 @@ class _DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -206,86 +210,53 @@ class _DashboardCard extends StatelessWidget {
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Stack(
-        clipBehavior: Clip.none,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppStrings.dashboard,
-                style: AppTextStyles.collectionsTitle,
-              ),
-              const SizedBox(height: 36),
-              SizedBox(
-                height: 286,
-                child: Column(
-                  children: [
-                    for (var row = 0; row < 3; row++) ...[
-                      if (row > 0)
-                        Container(height: 1, color: const Color(0xFFE8E8EE)),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            for (var col = 0; col < 3; col++) ...[
-                              if (col > 0)
-                                Container(
-                                  width: 1,
-                                  color: const Color(0xFFE8E8EE),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.dashboard,
+                  style: AppTextStyles.collectionsTitle,
+                ),
+                const SizedBox(height: 36),
+                SizedBox(
+                  height: 286,
+                  child: Column(
+                    children: [
+                      for (var row = 0; row < 3; row++) ...[
+                        if (row > 0)
+                          Container(height: 1, color: const Color(0xFFE8E8EE)),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              for (var col = 0; col < 3; col++) ...[
+                                if (col > 0)
+                                  Container(
+                                    width: 1,
+                                    color: const Color(0xFFE8E8EE),
+                                  ),
+                                Expanded(
+                                  child: _tile(context, tiles[row * 3 + col]),
                                 ),
-                              Expanded(
-                                child: _tile(context, tiles[row * 3 + col]),
-                              ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: -34,
-            right: -10,
-            child: IgnorePointer(
-              child: SizedBox(
-                width: 72,
-                height: 72,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco1,
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                    Positioned(
-                      left: 0,
-                      top: 28,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco2,
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                    Positioned(
-                      left: 28,
-                      top: 14,
-                      child: SvgPicture.asset(
-                        AppAssets.hexDeco3,
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
             ),
+          ),
+          const Positioned(
+            top: CardHexAccent.top,
+            right: CardHexAccent.right,
+            child: IgnorePointer(child: CardHexAccent()),
           ),
         ],
       ),
