@@ -1,4 +1,6 @@
-/// Summary repository placeholder.
-class SummaryRepository {
-  const SummaryRepository();
+import '../model/summary_data.dart';
+
+/// Abstract summary repository — swap [MockSummaryRepository] with API impl later.
+abstract class SummaryRepository {
+  Future<SummaryData> getSummary();
 }

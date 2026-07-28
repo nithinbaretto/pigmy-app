@@ -1,70 +1,64 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../domain/entities/collection_entity.dart';
 import '../../features/auth/presentation/login_screen.dart';
-import '../../features/bank_details/presentation/bank_details_screen.dart';
-import '../../features/collection/presentation/collection_form_screen.dart';
-import '../../features/collection/presentation/collection_list_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/splash_screen.dart';
+import '../../features/collection/presentation/collection_screen.dart';
+import '../../features/collection/presentation/customer_details_screen.dart';
+import '../../features/collection/presentation/customer_list_screen.dart';
+import '../../features/dashboard/presentation/collections_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
-import '../../features/printer/presentation/printer_screen.dart';
+import '../../features/printer/presentation/printer_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/summary/presentation/summary_screen.dart';
-import '../../features/sync/presentation/sync_screen.dart';
+import '../../features/sync/presentation/export_file_screen.dart';
+import '../../features/sync/presentation/import_file_screen.dart';
 import '../../features/transactions/presentation/transactions_screen.dart';
-import '../../shared/providers/providers.dart';
 import 'route_names.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-
   return GoRouter(
     initialLocation: RouteNames.splash,
-    redirect: (context, state) async {
-      final isLoggedIn = await authRepository.isAuthenticated();
-      final isLoginRoute = state.matchedLocation == RouteNames.login;
-
-      if (!isLoggedIn && !isLoginRoute) return RouteNames.login;
-      if (isLoggedIn && (isLoginRoute || state.matchedLocation == RouteNames.splash)) {
-        return RouteNames.dashboard;
-      }
-      return null;
-    },
+    debugLogDiagnostics: false,
     routes: [
       GoRoute(
         path: RouteNames.splash,
-        builder: (context, state) => const _SplashScreen(),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: RouteNames.login,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
+        path: RouteNames.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
         path: RouteNames.dashboard,
         builder: (context, state) => const DashboardScreen(),
       ),
       GoRoute(
+        path: RouteNames.collections,
+        builder: (context, state) => const CollectionsScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.customers,
+        builder: (context, state) => const CustomerListScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.customerDetails,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return CustomerDetailsScreen(customerId: id);
+        },
+      ),
+      GoRoute(
         path: RouteNames.collection,
         builder: (context, state) {
-          final type = state.uri.queryParameters['type'];
-          return CollectionListScreen(
-            type: type != null ? CollectionType.fromCode(type) : CollectionType.pigmy,
-          );
+          final id = state.pathParameters['id']!;
+          return CollectionScreen(customerId: id);
         },
-        routes: [
-          GoRoute(
-            path: 'form',
-            builder: (context, state) {
-              final type = state.uri.queryParameters['type'];
-              return CollectionFormScreen(
-                type: type != null
-                    ? CollectionType.fromCode(type)
-                    : CollectionType.pigmy,
-              );
-            },
-          ),
-        ],
       ),
       GoRoute(
         path: RouteNames.transactions,
@@ -77,30 +71,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RouteNames.settings,
         builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: RouteNames.bankDetails,
-        builder: (context, state) => const BankDetailsScreen(),
-      ),
-      GoRoute(
-        path: RouteNames.printer,
-        builder: (context, state) => const PrinterScreen(),
-      ),
-      GoRoute(
-        path: RouteNames.sync,
-        builder: (context, state) => const SyncScreen(),
+        routes: [
+          GoRoute(
+            path: 'printer',
+            builder: (context, state) => const PrinterSettingsScreen(),
+          ),
+          GoRoute(
+            path: 'import',
+            builder: (context, state) => const ImportFileScreen(),
+          ),
+          GoRoute(
+            path: 'export',
+            builder: (context, state) => const ExportFileScreen(),
+          ),
+        ],
       ),
     ],
   );
 });
-
-class _SplashScreen extends StatelessWidget {
-  const _SplashScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
-  }
-}

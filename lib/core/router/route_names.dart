@@ -3,13 +3,16 @@ class RouteNames {
 
   static const String splash = '/';
   static const String login = '/login';
+  static const String register = '/register';
   static const String dashboard = '/dashboard';
-  static const String collection = '/collection';
-  static const String collectionForm = '/collection/form';
+  static const String collections = '/collections';
+  static const String customers = '/customers';
+  static const String customerDetails = '/customers/:id';
+  static const String collection = '/collection/:id';
   static const String transactions = '/transactions';
   static const String summary = '/summary';
   static const String settings = '/settings';
-  static const String bankDetails = '/bank-details';
-  static const String printer = '/printer';
-  static const String sync = '/sync';
+  static const String printer = '/settings/printer';
+  static const String importFile = '/settings/import';
+  static const String exportFile = '/settings/export';
 }

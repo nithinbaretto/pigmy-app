@@ -2,21 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/router/app_router.dart';
-import 'core/services/isar_service.dart';
 import 'core/theme/app_theme.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final container = ProviderContainer();
-  await container.read(isarServiceProvider).init();
-
-  runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const PigmyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: PigmyApp()));
 }
 
 class PigmyApp extends ConsumerWidget {
@@ -27,7 +17,7 @@ class PigmyApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Pigmy Collection',
+      title: 'iPoll Pigmy',
       theme: AppTheme.lightTheme,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
