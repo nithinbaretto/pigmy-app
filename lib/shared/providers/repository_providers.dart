@@ -1,24 +1,31 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/network/auth_session.dart';
 import '../../features/auth/repository/auth_repository.dart';
-import '../../features/auth/repository/mock_auth_repository.dart';
+import '../../features/auth/repository/remote_auth_repository.dart';
 import '../../features/collection/repository/customer_repository.dart';
 import '../../features/collection/repository/mock_customer_repository.dart';
 import '../../features/summary/repository/mock_summary_repository.dart';
 import '../../features/summary/repository/summary_repository.dart';
 import '../../features/transactions/repository/mock_transaction_repository.dart';
 import '../../features/transactions/repository/transaction_repository.dart';
+import 'app_providers.dart';
 
 // ── Singleton mock instances (shared in-memory state) ─────────────────────
 
 final _mockCustomerRepo = MockCustomerRepository();
 final _mockTransactionRepo = MockTransactionRepository(_mockCustomerRepo);
 final _mockSummaryRepo = MockSummaryRepository(_mockCustomerRepo, _mockTransactionRepo);
-final _mockAuthRepo = MockAuthRepository();
 
-// ── Repository providers — swap implementations in future phases ──────────
+// ── Repository providers
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) => _mockAuthRepo);
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  return RemoteAuthRepository(
+    authService: ref.watch(authServiceProvider),
+    session: ref.watch(authSessionProvider),
+    prefs: ref.watch(sharedPreferencesProvider),
+  );
+});
 
 final customerRepositoryProvider = Provider<CustomerRepository>((ref) => _mockCustomerRepo);
 

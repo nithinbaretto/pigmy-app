@@ -50,7 +50,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _handleLogin() async {
     if (!_isFormFilled) return;
     final success = await ref.read(authControllerProvider.notifier).login();
-    if (success && mounted) context.go(RouteNames.dashboard);
+    if (!mounted) return;
+    if (success) {
+      context.go(RouteNames.dashboard);
+      return;
+    }
+    final message = ref.read(authControllerProvider).errorMessage;
+    if (message.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   @override

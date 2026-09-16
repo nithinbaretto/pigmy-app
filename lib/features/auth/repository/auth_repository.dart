@@ -1,11 +1,23 @@
+import '../model/auth_api_models.dart';
 import '../model/auth_state.dart';
 
-/// Abstract auth repository — swap [MockAuthRepository] with API impl later.
 abstract class AuthRepository {
-  Future<bool> login({required String username, required String password});
-  Future<bool> register({required String username, required String password});
+  Future<AuthActionResult> login({
+    required String username,
+    required String password,
+  });
+
+  Future<AuthActionResult> register({
+    required String username,
+    required String password,
+  });
+
   Future<void> logout();
+
+  Future<bool> restoreSession();
+
   bool get isLoggedIn;
+
   AppMode get appMode;
   set appMode(AppMode mode);
 }

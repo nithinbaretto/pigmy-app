@@ -16,8 +16,12 @@ dependencies:
   # Navigation
   go_router: ^14.6.2
 
-  # Networking (placeholder for future API integration)
+  # Networking
   dio: ^5.7.0
+  device_info_plus: ^11.3.0
+  android_id: ^0.4.1
+  media_drm_id: ^0.0.2
+  shared_preferences: ^2.5.3
 
   # Animations
   flutter_animate: ^4.5.2

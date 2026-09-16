@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_strings.dart';
@@ -9,16 +10,17 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/auth_logo.dart';
 import '../../../core/widgets/hex_background.dart';
+import '../controller/auth_controller.dart';
 
 /// Splash screen — Figma Splash 3 (logo + company name + tagline).
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -27,9 +29,17 @@ class _SplashScreenState extends State<SplashScreen> {
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
     ));
-    Future.delayed(const Duration(milliseconds: 2800), () {
-      if (mounted) context.go(RouteNames.login);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _boot());
+  }
+
+  Future<void> _boot() async {
+    final delay = Future<void>.delayed(const Duration(milliseconds: 2800));
+    final session = ref.read(authControllerProvider.notifier).restoreSession();
+    await delay;
+    if (!mounted) return;
+    final restored = await session;
+    if (!mounted) return;
+    context.go(restored ? RouteNames.dashboard : RouteNames.login);
   }
 
   @override

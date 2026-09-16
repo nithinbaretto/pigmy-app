@@ -24,11 +24,15 @@ class RegisterController extends StateNotifier<RegisterState> {
   Future<void> register() async {
     if (!state.isFormValid) return;
 
-    state = state.copyWith(isLoading: true);
-    await _repository.register(
+    state = state.copyWith(isLoading: true, errorMessage: '', showSuccess: false);
+    final result = await _repository.register(
       username: state.username,
       password: state.password,
     );
-    state = state.copyWith(isLoading: false, showSuccess: true);
+    state = state.copyWith(
+      isLoading: false,
+      showSuccess: result.success,
+      errorMessage: result.success ? '' : result.message,
+    );
   }
 }

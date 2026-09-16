@@ -50,10 +50,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   Future<void> _handleRegister() async {
     await ref.read(registerControllerProvider.notifier).register();
-    final showSuccess = ref.read(registerControllerProvider).showSuccess;
-    if (showSuccess && mounted) {
+    if (!mounted) return;
+    final state = ref.read(registerControllerProvider);
+    if (state.showSuccess) {
       await Future<void>.delayed(const Duration(seconds: 2));
       if (mounted) context.go(RouteNames.login);
+      return;
+    }
+    if (state.errorMessage.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage)),
+      );
     }
   }
 

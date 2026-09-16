@@ -5,6 +5,7 @@ class RegisterState {
     this.confirmPassword = '',
     this.isLoading = false,
     this.showSuccess = false,
+    this.errorMessage = '',
   });
 
   final String username;
@@ -12,6 +13,7 @@ class RegisterState {
   final String confirmPassword;
   final bool isLoading;
   final bool showSuccess;
+  final String errorMessage;
 
   bool get isFormValid =>
       username.trim().isNotEmpty &&
@@ -28,6 +30,7 @@ class RegisterState {
     String? confirmPassword,
     bool? isLoading,
     bool? showSuccess,
+    String? errorMessage,
   }) {
     return RegisterState(
       username: username ?? this.username,
@@ -35,6 +38,7 @@ class RegisterState {
       confirmPassword: confirmPassword ?? this.confirmPassword,
       isLoading: isLoading ?? this.isLoading,
       showSuccess: showSuccess ?? this.showSuccess,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }

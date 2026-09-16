@@ -24,14 +24,19 @@ class AuthController extends StateNotifier<LoginState> {
   }
 
   Future<bool> login() async {
-    state = state.copyWith(isLoading: true);
-    final success = await _repository.login(
+    state = state.copyWith(isLoading: true, errorMessage: '');
+    final result = await _repository.login(
       username: state.username,
       password: state.password,
     );
-    state = state.copyWith(isLoading: false);
-    return success;
+    state = state.copyWith(
+      isLoading: false,
+      errorMessage: result.success ? '' : result.message,
+    );
+    return result.success;
   }
+
+  Future<bool> restoreSession() => _repository.restoreSession();
 
   Future<void> logout() async {
     await _repository.logout();
